@@ -35,6 +35,8 @@ public class DataMunger {
 
 	public String[] getSplitStrings(String queryString) {
 
+		System.out.println("Hi");
+
 		return null;
 	}
 
