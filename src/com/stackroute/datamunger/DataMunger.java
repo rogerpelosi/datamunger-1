@@ -147,23 +147,40 @@ public class DataMunger {
 	
 	public String getConditionsPartQuery(String queryString) {
 
+		//split the queryString into an array based on the spaces
 		String [] splitQuery = getSplitStrings(queryString);
+
+		//store the result of calling getFileName in var to the compare in traversal to find index
 		String fileName = getFileName(queryString);
 
+		//initialize var to store index of filename, to then take what is after that index (the conditions)
 		int fileNameIndex;
 
+		//initialize var to later store and return the conditional partquery as a string
 		String finalConditionQuery = "";
 
+		//loop through the split query
 		for(int i = 0; i < splitQuery.length; i++) {
+			//if current split query item is = to the stored filename
 			if (splitQuery[i].toLowerCase().equals(fileName)) {
+				//set the filenameindex to then later use
 				fileNameIndex = i;
+				//loop through split query again
 				for (int x = 0; x < splitQuery.length; x++) {
+					//if current position is beyond fileNAMEindex, and does not = where keyword
 					if (x > fileNameIndex && !(splitQuery[x].equals("where"))) {
-						finalConditionQuery += splitQuery[x] + " ";
+						//so long as the current word is not order or group
+						if(!(splitQuery[x].equals("order")) && !(splitQuery[x].equals("group"))){
+							//add that word to the finalConditionQuery output with a space
+							finalConditionQuery += splitQuery[x] + " ";
+						} else {
+							//otherwise return output before group and order by clauses
+							return finalConditionQuery;}
 //						System.out.println(splitQuery[x]);
 					}
 				}
 			}
+			//if the output is not void essentially, then return finalConditionQuery and trim the end space lol
 			if(finalConditionQuery.length() > 0){return finalConditionQuery.trim();}
 		}
 		return null;
@@ -186,8 +203,78 @@ public class DataMunger {
 
 	public String[] getConditions(String queryString) {
 
+		String conditions = getConditionsPartQuery(queryString);
+		String[] conditionsArr;
+
+		String x = " and ";
+		String y = " or ";
+
+		System.out.println(conditions);
+
+		if(!conditions.contains(x) && !conditions.contains(y)){
+			conditionsArr = new String[1];
+			conditionsArr[0] = conditions;
+			return conditionsArr;
+		}
+		else if(conditions.contains(x) && !conditions.contains(y)){
+			conditionsArr = conditions.split(x);
+			System.out.println("has and keyword");
+			return conditionsArr;
+		}
+		else if(conditions.contains(y) && !conditions.contains(x)){
+			conditionsArr = conditions.split(y);
+			System.out.println("has or keyword");
+			return conditionsArr;
+		} else if(conditions.contains(x) && conditions.contains(y)){
+			conditionsArr = conditions.split("[x,y]");
+			System.out.println("has both!");
+			return conditionsArr;
+		}
+
+//		if(conditions.contains(" or ")){
+//			conditionsArr = conditions.split(" or ");
+//			System.out.println("The array has " + conditionsArr.length + " items");
+//			for(String x: conditionsArr){
+//				System.out.println(x);
+//			}
+//		}
+
+		//if the condition string has and but not or, simply split at and
+//		if(conditions.contains("and") && !(conditions.contains(("or")))){
+//			conditionsArr = conditions.split("and");
+//			System.out.println("has and but no or");
+//			return conditionsArr;
+//			//if the condition string has or but not and, simply split at or
+//		} else if(conditions.contains("or") && !(conditions.contains(("and")))){
+//			conditionsArr = conditions.split("or");
+//			System.out.println("has or but no and");
+//
+//			return conditionsArr;
+//		}
+
 		return null;
 	}
+
+	//		if(conditions.contains("and") && !(conditions.contains("or"))){
+//			conditionsArr = conditions.split("and");
+//			for(String con: conditionsArr){
+//				System.out.println(con);
+//			}
+//			return conditionsArr; }
+//		 } else if(conditions.contains("or") && !(conditions.contains("and"))){
+//			conditionsArr = conditions.split("or");
+//			return conditionsArr;
+//		} else {
+//			conditionsArr = conditions.split("'and','or'");
+//			for(String xy: conditionsArr){System.out.println(xy);}
+//			return conditionsArr;
+//		}
+//		String[] conditionsArr;
+//		System.out.println(conditions.contains("and"));
+
+//		for(String xy:conditionsArr){
+//			Sys
+//		}
 
 	/*
 	 * This method will extract logical operators(AND/OR) from the query string. The
