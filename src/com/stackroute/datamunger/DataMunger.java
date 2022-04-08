@@ -31,8 +31,7 @@ import java.util.Locale;
 
 public class DataMunger {
 
-	/*This method will split the query string based on space into an array of words
-	  and display it on console*/
+	/*This method will split the query string based on space into an array of words and display it on console*/
 
 	public String[] getSplitStrings(String queryString) {
 
@@ -48,15 +47,20 @@ public class DataMunger {
 		return finalQuery;
 	}
 
-	/*
-	 * Extract the name of the file from the query. File name can be found after a
-	 * space after "from" clause. Note: ----- CSV file can contain a field that
-	 * contains from as a part of the column name. For eg: from_date,from_hrs etc.
-	 * 
-	 * Please consider this while extracting the file name in this method.
-	 */
+	/*Extract the name of the file from the query. File name can be found after a space after "from" clause. Note: ----- CSV file can contain a field that
+	 * contains from as a part of the column name. For eg: from_date,from_hrs etc. Please consider this while extracting the file name in this method.*/
 
 	public String getFileName(String queryString) {
+
+		String fileName;
+		String [] splitQuery = getSplitStrings(queryString);
+
+		for(int i =0; i < splitQuery.length; i++){
+			if(splitQuery[i].toLowerCase().equals("from")) {
+				fileName = splitQuery[i + 1];
+				return fileName;
+			}
+		}
 
 		return null;
 	}
@@ -72,6 +76,23 @@ public class DataMunger {
 	 */
 	
 	public String getBaseQuery(String queryString) {
+
+		String [] splitQuery = getSplitStrings(queryString);
+		String fileName = getFileName(queryString);
+
+		int fileNameIndex;
+
+		String finalBaseQuery = "";
+
+		for(int i = 0; i < splitQuery.length; i++) {
+			if (splitQuery[i].toLowerCase().equals(fileName)) {
+				fileNameIndex = i;
+				for (int x = 0; x <= fileNameIndex; x++) {
+					finalBaseQuery += splitQuery[x] + " ";
+				}
+				if(finalBaseQuery.length() > 0){return finalBaseQuery.trim();}
+			}
+		}
 
 		return null;
 	}
