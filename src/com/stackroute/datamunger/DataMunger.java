@@ -111,7 +111,16 @@ public class DataMunger {
 	
 	public String[] getFields(String queryString) {
 
-		return null;
+		String[] splitQuery = getSplitStrings(queryString);
+		String[] fields = new String[splitQuery[1].length()];
+
+ 		for(int i =0; i < splitQuery.length; i++){
+			if(i == 1){
+				fields[0] = splitQuery[i];
+			}
+		}
+
+		return queryString.length() > 0 ? fields : null;
 	}
 
 	/*
@@ -126,6 +135,23 @@ public class DataMunger {
 	
 	public String getConditionsPartQuery(String queryString) {
 
+		String [] splitQuery = getSplitStrings(queryString);
+		String fileName = getFileName(queryString);
+
+		int fileNameIndex;
+
+		String finalConditionQuery = "";
+
+		for(int i = 0; i < splitQuery.length; i++) {
+			if (splitQuery[i].toLowerCase().equals(fileName)) {
+				fileNameIndex = i;
+				for (int x = 0; x <= splitQuery.length; x++) {
+					if (x > fileNameIndex) {
+						System.out.println(splitQuery[x]);
+					}
+				}
+			}
+		}
 		return null;
 	}
 
