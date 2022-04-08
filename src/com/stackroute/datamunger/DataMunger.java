@@ -145,12 +145,14 @@ public class DataMunger {
 		for(int i = 0; i < splitQuery.length; i++) {
 			if (splitQuery[i].toLowerCase().equals(fileName)) {
 				fileNameIndex = i;
-				for (int x = 0; x <= splitQuery.length; x++) {
-					if (x > fileNameIndex) {
-						System.out.println(splitQuery[x]);
+				for (int x = 0; x < splitQuery.length; x++) {
+					if (x > fileNameIndex && !(splitQuery[x].equals("where"))) {
+						finalConditionQuery += splitQuery[x] + " ";
+//						System.out.println(splitQuery[x]);
 					}
 				}
 			}
+			if(finalConditionQuery.length() > 0){return finalConditionQuery.trim();}
 		}
 		return null;
 	}
