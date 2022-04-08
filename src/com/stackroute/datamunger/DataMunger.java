@@ -112,15 +112,27 @@ public class DataMunger {
 	public String[] getFields(String queryString) {
 
 		String[] splitQuery = getSplitStrings(queryString);
-		String[] fields = new String[splitQuery[1].length()];
+		String[] fs = splitQuery[1].split(",");
 
- 		for(int i =0; i < splitQuery.length; i++){
-			if(i == 1){
-				fields[0] = splitQuery[i];
-			}
-		}
+		//currently saying the length is as long second index length (23 char)
+//		String[] fields = new String[splitQuery[1].length()];
 
-		return queryString.length() > 0 ? fields : null;
+//		String[] finalFields;
+//		String x;
+
+// 		for(int i =0; i < splitQuery.length; i++){
+//			if(i == 1){
+//				fields[0] = splitQuery[i];
+//				x = fields[0];
+//
+////				System.out.println(splitQuery.length);
+//			}
+//		}
+//		 for(String ee: fs) {
+//			 System.out.println(ee);
+//		 }
+
+		return queryString.length() > 0 ? fs : null;
 	}
 
 	/*
