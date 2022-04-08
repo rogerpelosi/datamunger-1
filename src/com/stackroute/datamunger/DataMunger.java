@@ -26,18 +26,26 @@ package com.stackroute.datamunger;
  * the test cases together.
  */
 
+import java.util.ArrayList;
+import java.util.Locale;
+
 public class DataMunger {
 
-	/*
-	 * This method will split the query string based on space into an array of words
-	 * and display it on console
-	 */
+	/*This method will split the query string based on space into an array of words
+	  and display it on console*/
 
 	public String[] getSplitStrings(String queryString) {
 
-		System.out.println("Hi");
+		String[] splitQuery = queryString.split(" ");
+		String[] finalQuery = new String[splitQuery.length];
 
-		return null;
+		ArrayList<String> splitList = new ArrayList<String>();
+
+		for(int i = 0; i < splitQuery.length; i++) {
+			finalQuery[i] = splitQuery[i].toLowerCase();
+		}
+
+		return finalQuery;
 	}
 
 	/*
