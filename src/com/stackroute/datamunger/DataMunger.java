@@ -205,76 +205,43 @@ public class DataMunger {
 
 		String conditions = getConditionsPartQuery(queryString);
 		String[] conditionsArr;
+		String[] newCondArr;
 
 		String x = " and ";
 		String y = " or ";
 
-		System.out.println(conditions);
-
 		if(!conditions.contains(x) && !conditions.contains(y)){
 			conditionsArr = new String[1];
-			conditionsArr[0] = conditions;
+			conditionsArr[0] = conditions.trim();
 			return conditionsArr;
 		}
 		else if(conditions.contains(x) && !conditions.contains(y)){
 			conditionsArr = conditions.split(x);
-			System.out.println("has and keyword");
-			return conditionsArr;
+			newCondArr = new String[conditionsArr.length];
+			for(int i = 0; i < conditionsArr.length; i++) {
+				newCondArr[i] = conditionsArr[i].trim();
+			}
+			return newCondArr;
 		}
 		else if(conditions.contains(y) && !conditions.contains(x)){
 			conditionsArr = conditions.split(y);
-			System.out.println("has or keyword");
-			return conditionsArr;
+			newCondArr = new String[conditionsArr.length];
+			for(int i = 0; i < conditionsArr.length; i++) {
+				newCondArr[i] = conditionsArr[i].trim();
+			}
+			return newCondArr;
 		} else if(conditions.contains(x) && conditions.contains(y)){
-			conditionsArr = conditions.split("[x,y]");
+			String newCond = conditions.replaceAll(x, y);
+			conditionsArr = newCond.split(y);
+			newCondArr = new String[conditionsArr.length];
 			System.out.println("has both!");
-			return conditionsArr;
+			for(int i = 0; i < conditionsArr.length; i++) {
+				newCondArr[i] = conditionsArr[i].trim();
+			}
+			return newCondArr;
 		}
-
-//		if(conditions.contains(" or ")){
-//			conditionsArr = conditions.split(" or ");
-//			System.out.println("The array has " + conditionsArr.length + " items");
-//			for(String x: conditionsArr){
-//				System.out.println(x);
-//			}
-//		}
-
-		//if the condition string has and but not or, simply split at and
-//		if(conditions.contains("and") && !(conditions.contains(("or")))){
-//			conditionsArr = conditions.split("and");
-//			System.out.println("has and but no or");
-//			return conditionsArr;
-//			//if the condition string has or but not and, simply split at or
-//		} else if(conditions.contains("or") && !(conditions.contains(("and")))){
-//			conditionsArr = conditions.split("or");
-//			System.out.println("has or but no and");
-//
-//			return conditionsArr;
-//		}
-
 		return null;
 	}
-
-	//		if(conditions.contains("and") && !(conditions.contains("or"))){
-//			conditionsArr = conditions.split("and");
-//			for(String con: conditionsArr){
-//				System.out.println(con);
-//			}
-//			return conditionsArr; }
-//		 } else if(conditions.contains("or") && !(conditions.contains("and"))){
-//			conditionsArr = conditions.split("or");
-//			return conditionsArr;
-//		} else {
-//			conditionsArr = conditions.split("'and','or'");
-//			for(String xy: conditionsArr){System.out.println(xy);}
-//			return conditionsArr;
-//		}
-//		String[] conditionsArr;
-//		System.out.println(conditions.contains("and"));
-
-//		for(String xy:conditionsArr){
-//			Sys
-//		}
 
 	/*
 	 * This method will extract logical operators(AND/OR) from the query string. The
