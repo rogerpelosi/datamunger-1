@@ -201,9 +201,13 @@ public class DataMunger {
 	 * might not contain where clause at all.
 	 */
 
+
+
 	public String[] getConditions(String queryString) {
 
-		String conditions = getConditionsPartQuery(queryString);
+		System.out.println(queryString);
+
+		String conditions = getConditionsPartQuery(queryString) == null ? getConditionsPartQuery(queryString) : "no conditions";
 		String[] conditionsArr;
 		String[] newCondArr;
 
@@ -256,7 +260,41 @@ public class DataMunger {
 
 	public String[] getLogicalOperators(String queryString) {
 
+		//extract only the condition query
+		String conditions = getConditionsPartQuery((queryString));
+
+		//split the condition query into an array to then traverse
+		String[] splitArr = getSplitStrings(conditions);
+
+		//initialize operators to store any logical operators if they occur
+		ArrayList<String> operators = new ArrayList<String>();
+
+		//initialize opCount to count how many (if any) logical operators, to then use when creating opArr
+		int opCount = 0;
+
+		String and = "and";
+		String or = "or";
+
+		//for loop to count how many occurrences of log ops, if its an operator add to list
+		for(int i = 0; i < splitArr.length; i++){
+			if(splitArr[i].equals(and) || splitArr[i].equals(or)){
+				operators.add(splitArr[i]);
+				opCount += 1;
+			}
+		}
+
+		//if logical operators exist,
+		if(opCount > 0) {
+			//then create an opArr based on op array list size
+			String[] opArr = new String[operators.size()];
+			//set oparr equal to converting list to arr
+			opArr = operators.toArray(opArr);
+			//return opArr of logical operators
+			return opArr;
+		}
+
 		return null;
+
 	}
 
 	/*
