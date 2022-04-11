@@ -41,7 +41,7 @@ public class DataMunger {
 		ArrayList<String> splitList = new ArrayList<String>();
 
 		for(int i = 0; i < splitQuery.length; i++) {
-			finalQuery[i] = splitQuery[i].toLowerCase();
+			finalQuery[i] = splitQuery[i].toLowerCase().trim();
 		}
 
 		return finalQuery;
@@ -58,7 +58,7 @@ public class DataMunger {
 		for(int i =0; i < splitQuery.length; i++){
 			if(splitQuery[i].toLowerCase().equals("from")) {
 				fileName = splitQuery[i + 1];
-				return fileName;
+				return fileName.trim();
 			}
 		}
 
@@ -112,7 +112,7 @@ public class DataMunger {
 	public String[] getFields(String queryString) {
 
 		String[] splitQuery = getSplitStrings(queryString);
-		String[] fs = splitQuery[1].split(",");
+		String[] fs = splitQuery[1].trim().split(",");
 
 		//currently saying the length is as long second index length (23 char)
 //		String[] fields = new String[splitQuery[1].length()];
@@ -202,8 +202,6 @@ public class DataMunger {
 	 * as a substring. For eg: from_city,job_order_no,group_no etc. 2. The query
 	 * might not contain where clause at all.
 	 */
-
-
 
 	public String[] getConditions(String queryString) {
 
@@ -369,7 +367,56 @@ public class DataMunger {
 
 	public String[] getAggregateFunctions(String queryString) {
 
+		System.out.println(queryString);
+
+		//split query into array
+		String[] splitQueryString = queryString.split(" ");
+
+		//set agFun = to the first index where aggregate functions reside
+		String agFun = splitQueryString[1];
+
+		//split agfun string by commas into new array
+		String[] agFunArr = agFun.split(",");
+		String[] finalOutput;
+
+		//initialize count of ag funcs
+		int numOfFuncs = 0;
+
+		//set aggregate variables
+		String s = "sum(";
+		String c = "count(";
+		String mi = "min(";
+		String ma = "max(";
+		String a = "avg(";
+
+		//if there indexes
+		if(agFunArr.length > 0) {
+			for (String word : agFunArr) {
+				//and if there are agg functions to begin with
+				if(word.contains(s) || word.contains(c) || word.contains(a) || word.contains(mi) || word.contains(ma)){
+					//concat a string of only those functions
+					String funOnlyStr = "";
+			for (String item : agFunArr) {
+				if (item.contains(s) || item.contains(c) || item.contains(mi) || item.contains(ma) || item.contains(a)) {
+					//count the numbder of functs to create final out put arr
+					numOfFuncs += 1;
+					//concat sentence here
+					funOnlyStr = funOnlyStr + item + " ";
+				}
+			}
+
+			//create finalOutput array based on numOfFuncs
+			finalOutput = funOnlyStr.split(" ");
+
+			return finalOutput;
+			}
+		}
+		}
+
 		return null;
+
 	}
+
+	//----------------------------------------------------------------------------------------------------------------------
 
 }
