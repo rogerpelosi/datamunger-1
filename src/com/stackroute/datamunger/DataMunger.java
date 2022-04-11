@@ -181,7 +181,9 @@ public class DataMunger {
 				}
 			}
 			//if the output is not void essentially, then return finalConditionQuery and trim the end space lol
-			if(finalConditionQuery.length() > 0){return finalConditionQuery.trim();}
+			if(finalConditionQuery.length() > 0){
+				System.out.println("==condition query method " + finalConditionQuery);
+				return finalConditionQuery.trim();}
 		}
 		return null;
 	}
@@ -205,15 +207,15 @@ public class DataMunger {
 
 	public String[] getConditions(String queryString) {
 
-		System.out.println(queryString);
+		String conditions = getConditionsPartQuery(queryString);
 
-		String conditions = getConditionsPartQuery(queryString) == null ? getConditionsPartQuery(queryString) : "no conditions";
-		String[] conditionsArr;
+ 		String[] conditionsArr;
 		String[] newCondArr;
 
 		String x = " and ";
 		String y = " or ";
 
+		if(conditions != null){
 		if(!conditions.contains(x) && !conditions.contains(y)){
 			conditionsArr = new String[1];
 			conditionsArr[0] = conditions.trim();
@@ -238,13 +240,18 @@ public class DataMunger {
 			String newCond = conditions.replaceAll(x, y);
 			conditionsArr = newCond.split(y);
 			newCondArr = new String[conditionsArr.length];
-			System.out.println("has both!");
+//			System.out.println("has both!");
 			for(int i = 0; i < conditionsArr.length; i++) {
 				newCondArr[i] = conditionsArr[i].trim();
 			}
 			return newCondArr;
 		}
+		}
+
+		System.out.println("**get conditions method: " + conditions);
+
 		return null;
+
 	}
 
 	/*
@@ -307,6 +314,19 @@ public class DataMunger {
 
 	public String[] getOrderByFields(String queryString) {
 
+		//split query by order by
+		String[] splitOrderFieldsArr = queryString.split("order by");
+		String[] orderFields;
+
+		//if an orderby clause is found, splitOrderFieldsArr will have 2 indexes
+		if(splitOrderFieldsArr.length > 1){
+			//assign fields that follow order by (the second index) to string
+			String fields = splitOrderFieldsArr[1].trim();
+			//split the fields by space (for if there are multi order statements)
+			String[] finalOrderFields = fields.split(" ");
+			return finalOrderFields;
+		}
+
 		return null;
 	}
 
@@ -320,6 +340,19 @@ public class DataMunger {
 	 */
 
 	public String[] getGroupByFields(String queryString) {
+
+		//split query by order by
+		String[] splitGroupFieldsArr = queryString.split("group by");
+		String[] groupFields;
+
+		//if a groupby clause is found, splitGroupFieldsArr will have 2 indexes
+		if(splitGroupFieldsArr.length > 1){
+			//assign fields that follow group by (the second index) to string
+			String fields = splitGroupFieldsArr[1].trim();
+			//split the fields by space (for if there are multi group statements)
+			String[] finalGroupFields = fields.split(" ");
+			return finalGroupFields;
+		}
 
 		return null;
 	}
