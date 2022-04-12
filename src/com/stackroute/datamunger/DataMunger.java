@@ -173,16 +173,18 @@ public class DataMunger {
 						if(!(splitQuery[x].equals("order")) && !(splitQuery[x].equals("group"))){
 							//add that word to the finalConditionQuery output with a space
 							finalConditionQuery += splitQuery[x] + " ";
-						} else {
+						} else if(!(splitQuery[x].equals("order")) || !(splitQuery[x].equals("group"))){
 							//otherwise return output before group and order by clauses
-							return finalConditionQuery;}
-//						System.out.println(splitQuery[x]);
+							System.out.println("Final Conditions Query: "+finalConditionQuery);
+							System.out.println("Length: " + finalConditionQuery.length());
+							System.out.println(queryString);
+							return finalConditionQuery.trim();
+							}
 					}
 				}
 			}
 			//if the output is not void essentially, then return finalConditionQuery and trim the end space lol
 			if(finalConditionQuery.length() > 0){
-				System.out.println("==condition query method " + finalConditionQuery);
 				return finalConditionQuery.trim();}
 		}
 		return null;
@@ -367,7 +369,6 @@ public class DataMunger {
 
 	public String[] getAggregateFunctions(String queryString) {
 
-		System.out.println(queryString);
 
 		//split query into array
 		String[] splitQueryString = queryString.split(" ");
